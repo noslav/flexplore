@@ -91,3 +91,97 @@ Centralized Credit Scoring - Social credit score, solutions created by central t
 	2. Suffering from an organizational crisis
 
 ## 12-04-2019
+
+The Big Picture - uport, 3box are doing identities in which you own the data you want to share, Enigma on the other hand obfuscates the data you provide and still allows you to prove things worth proving about your identity. 
+
+### 2. Technical Deep dive 3box, uport - notes on how Eth community has used their tech
+- [3box](https://3box.io/)
+	1. ![3box](https://cdn-images-1.medium.com/max/1280/0*khoc0ndjMxAvm640)
+	2. Since 3Box data is stored on IPFS and managed in OrbitDB instances, 3Box provides an off-chain, user-addressed content graph with support for encrypted data that is accessible to Ethereum developers via a simple front-end javascript library.
+	3. Call Box.getProfile(<ethereum address>) to lookup a public profile
+	4. Call Box.openBox(<ethereum address>, ethereumProvider) to request interactive permissions
+	5. Call box.onSyncDone(callbackFunction) to know when the db is fully synced
+	6. Call box.public.set(<key>, <value>) or box.private.set(<key>, <value>) to write data
+	7. Call box.public.get(<key>) or box.private.get(<key>) to read data
+	8. Call box.public.remove(<key>) or box.private.remove(<key>) to delete data
+	9. Call box.close() or box.logout() to end the session
+	- [x] Get public profiles for one or more Ethereum accounts 
+	- [x] Onboard social user profiles with one click. 
+	- [x] Create new profiles seamlessly when neededStore data/content with the user, in the user’s control
+	- [x] Share data between apps for shared user reputation
+	- [x] Store communication keys, such as public encryption keys, for a PKI
+	- [x] Store and request private, encrypted information
+	10. 3Box needed to focus on delivering in the near-term to medium-term was starting to look less and less like the mobile, privacy-preserving, self-sovereign identity system that uPort is focused on building at the moment.
+	11. Use cases of 3box.js 
+	- [x] replace hex addresses with social user profiles 
+	- [x] private encrypted storage 
+	- [x] user onboarding 
+	- [x] decentralized messaging or public key infrastructure (PKI)
+	- [x] distributed user content storage and management
+	- [x] Sharing data between apps 
+	- [x] Shared reputation systesm where all the data you generate goes to generating your reputation
+	- [x] 
+
+- [uport](https://medium.com/uport/what-is-a-uport-identity-b790b065809c)
+
+	1. Digital representation of a person, app, organization, to make statements of who they are when interacting with smart contracts.
+	2. No requirements for centralized identity providers.
+	3. Allows for private key recovery
+	4. uPort founded the Decentralized Identity Foundation with Microsoft, Blockstack and a core group of blockchain companies in 2017. It now consists of more than 35 organizations.
+	5. uPort Connect - 
+	- [x] Handle user logins
+	- [x] Request Ethereum transaction signing
+	- [x] Keep your users logged into an app
+	- [x] Use QR code & push notification flow for desktop browsers
+	- [x] Use frictionless app linking for mobile browsers 
+
+	6. uPort Credentials -  
+	- [x] Create and verify authentication requests
+	- [x] Request verified claims
+	- [x] Verify claims for your users
+	- [x] Ask users to sign Ethereum transactions
+	- [x] Create Ethereum smartcontract function call requests without web 3.0
+
+	7. uPort Transports - 
+	- [x] Send messages to users using a QR code
+	- [x] Send requests and receive responses through URLs
+	- [x] send encrypted push notifications
+	- [x] Create Transports specific to your use case and environment
+
+### 3. Enigma - try out an implementation to ask get questions to engage
+
+- [Implementation example](https://enigma.co/catalyst/beginner-tutorial.html)
+
+	1. 
+	 
+### 4. Group Pitches
+
+1. Pitch week - 1
+
+> Feedback 
+> Stefan van Rest, BE3   [2 hours ago]
+> Great talker> 
+
+> Philip Haibach   [2 hours ago]
+> Very compelling Angelo> 
+
+> Philipp Scheik, BE3   [2 hours ago]
+> Very passionate - good pitch> 
+
+> Jurek Herwig   [2 hours ago]
+> Very nice body language!> 
+
+> Philip Haibach   [2 hours ago]
+> I liked the problem description but the solution was quite unclear
+
+> Philip Haibach   [2 hours ago]
+> Use the 90 seconds that you have
+
+> Angelo Min, BE3   [2 hours ago]
+> Thanks for the feedback guys!> 
+
+> Mitchell Duffy, BE3   [1 hour ago]
+> Great pitch, well structured. I’d trust you guys with or without identification
+
+
+
