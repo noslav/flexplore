@@ -4,7 +4,9 @@
 ## 11-04-2019
 
 The Big picture - 
-Centralized Credit Scoring - Social credit score, solutions created by central third parties have come to be viewed as insecure at best and dystopian at worst.
+Centralized Credit Scoring - Social credit score, solutions created by central third parties have come to be viewed as insecure at best and dystopian at worst. 
+
+![Market Map](https://cdn-images-1.medium.com/max/1920/1*7Qq2oqvr_ZfyHt59J9jbIQ.png)
 
 ### 1. Bloom, uport deepdive - notes in the doc
 - [Bloom](https://bloom.co/docs/contracts/accounts)
@@ -183,9 +185,13 @@ The Big Picture - uport, 3box are doing identities in which you own the data you
 > Mitchell Duffy, BE3   [1 hour ago]
 > Great pitch, well structured. I’d trust you guys with or without identification
 
-## 13-04-2019
+## 15-04-2019
 
 The big picture - need to understand if Enigma and 3box are the right tools for us and if they work today or not.
+
+![Investable Themes](https://cdn-images-1.medium.com/max/1920/1*nAJysBm5NxFDn2D3NWudHQ.png)
+
+![Keys to Mass adoption](https://cdn-images-1.medium.com/max/1920/1*lyIhIkcLXtHqpSRCqBFsdw.png)
 
 
 ### 1. Implementing Enigma - code in research repository with comments
@@ -261,10 +267,10 @@ The big picture - need to understand if Enigma and 3box are the right tools for 
 
 	4. `Callback` - This is a public function automatically called by the worker (the `onlyEnigma()` modifier) after the callable function is completed. It is responsible for committing the results and altering the contract state. In this example, we input the `_address` we have obtained from the callable, store it as the richestMillionaire state variable, and emit the CallbackFinished event. The output of the final event is important, as it is possible to set up an event watcher within the front-end to perform a task upon successful completion.
 
-	5.
-	callable public pure function
+	5. callable public pure function
+
 	```solidity
-	       /*
+	   /*
        CALLABLE FUNCTION run in SGX to decipher encrypted net worths to
        determine richest millionaire
        */
@@ -285,10 +291,10 @@ The big picture - need to understand if Enigma and 3box are the right tools for 
        }
 	```
 
-	6. callback `onlyEnigma()`
+	6. callback fn `onlyEnigma()`
 
 	```solidity
-	       /*
+	   /*
        CALLBACK FUNCTION to change contract state tracking richest
        millionaire's name
        */
@@ -300,4 +306,24 @@ The big picture - need to understand if Enigma and 3box are the right tools for 
 
 ### 3. Questions from both that enable engagement with their teams
 
-### 4. Start the idea maze
+- [List of people to contact]()
+- [List of open questions]()
+	1. 
+
+### 4. Jump start the idea maze
+
+[idea maze](https://www.dropbox.com/preview/Public/Flexplore/idea_maze.sdr?role=personal)
+
+
+## 16-04-2018
+
+
+The Big Picture - Find out if credit scoring is a big enough pain for lending and borrowing platforms today or is it more like a pain 3-4 years from now. 
+
+![Ethereum's Defi](https://www.theblockcrypto.com/wp-content/uploads/2019/03/Screen-Shot-2019-03-14-at-4.57.46-PM-1185x675.png)
+
+
+### 1. 
+
+
+
