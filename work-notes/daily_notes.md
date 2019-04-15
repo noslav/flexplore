@@ -53,20 +53,20 @@ Centralized Credit Scoring - Social credit score, solutions created by central t
 - [Enigma Credit Scoring](https://blog.enigma.co/decentralizing-credit-with-enigma-440c6648b4d8)
 
 	1. Define your credit score: 
-	- [x] Number and types of accounts (credit card, checking account, saving account etc.)
-	- [x] Payment history and timely payment
-	- [x] Outstanding balance vs. credit limit (also called credit utilization)
-	- [x] Length of banking relationship
-	- [x] Types of credit used 
+		- [x] Number and types of accounts (credit card, checking account, saving account etc.)
+		- [x] Payment history and timely payment
+		- [x] Outstanding balance vs. credit limit (also called credit utilization)
+		- [x] Length of banking relationship
+		- [x] Types of credit used 
 	2. ![credit scoring with enigma](https://cdn-images-1.medium.com/max/1600/0*RC9r5xtGZ1dKLoW5)
 	3. [Colendi](https://www.colendi.com/) is blockchain based credit scoring project, which utilizes alternative data inputs such as utility bill payment, retail spending and more
 	4. [Cerved](https://www.cerved.com/it), an Italian credit scoring agency, is also interested in applying open data protocols enabled by PSD2 to enable a more transparent credit scoring process.
 	5. ![On-Chain/Off-Chain](https://cdn-images-1.medium.com/max/1600/1*r5UKAkNircauBl6oTtHmsg.png)
 	6. An Enigma contract can allow the company running the token sale to create a contract where your inputs — the wallet addresses you own — are secret but can be computed on. This contract can determine whether you qualify for the token sale or not
 	7. They have already performed an 45 Mil ICO and the tokens will be used for 
-	- [x] As a security deposit to ensure that anyone participating in the network (node processing) is being honest. If they try to tamper with the data they would lose their deposit.
-	- [x] As payment for any sort of computations or actions done on the network (Gas).
-	- [x] As payment for fees to store data on the platform.
+		- [x] As a security deposit to ensure that anyone participating in the network (node processing) is being honest. If they try to tamper with the data they would lose their deposit.
+		- [x] As payment for any sort of computations or actions done on the network (Gas).
+		- [x] As payment for fees to store data on the platform.
 	8. You need the token to run a node (part of the network). Every node gets a reward for processing and completing data, but the node must make a security deposit before completing said data. If the data is incorrect (tampered) they will lose their deposit and that deposit will be split between all the nodes that correctly processed the data.
 	9. tl;dr you need ENG to participate in the network, participating rewards you with more ENG.
 
@@ -105,22 +105,22 @@ The Big Picture - uport, 3box are doing identities in which you own the data you
 	7. Call box.public.get(<key>) or box.private.get(<key>) to read data
 	8. Call box.public.remove(<key>) or box.private.remove(<key>) to delete data
 	9. Call box.close() or box.logout() to end the session
-	- [x] Get public profiles for one or more Ethereum accounts 
-	- [x] Onboard social user profiles with one click. 
-	- [x] Create new profiles seamlessly when neededStore data/content with the user, in the user’s control
-	- [x] Share data between apps for shared user reputation
-	- [x] Store communication keys, such as public encryption keys, for a PKI
-	- [x] Store and request private, encrypted information
+		- [x] Get public profiles for one or more Ethereum accounts 
+		- [x] Onboard social user profiles with one click. 
+		- [x] Create new profiles seamlessly when neededStore data/content with the user, in the user’s control
+		- [x] Share data between apps for shared user reputation
+		- [x] Store communication keys, such as public encryption keys, for a PKI
+		- [x] Store and request private, encrypted information
 	10. 3Box needed to focus on delivering in the near-term to medium-term was starting to look less and less like the mobile, privacy-preserving, self-sovereign identity system that uPort is focused on building at the moment.
 	11. Use cases of 3box.js 
-	- [x] replace hex addresses with social user profiles 
-	- [x] private encrypted storage 
-	- [x] user onboarding 
-	- [x] decentralized messaging or public key infrastructure (PKI)
-	- [x] distributed user content storage and management
-	- [x] Sharing data between apps 
-	- [x] Shared reputation systesm where all the data you generate goes to generating your reputation
-	- [x] 
+		- [x] replace hex addresses with social user profiles 
+		- [x] private encrypted storage 
+		- [x] user onboarding 
+		- [x] decentralized messaging or public key infrastructure (PKI)
+		- [x] distributed user content storage and management
+		- [x] Sharing data between apps 
+		- [x] Shared reputation systesm where all the data you generate goes to generating your reputation
+		- [x] 
 
 - [uport](https://medium.com/uport/what-is-a-uport-identity-b790b065809c)
 
@@ -129,24 +129,24 @@ The Big Picture - uport, 3box are doing identities in which you own the data you
 	3. Allows for private key recovery
 	4. uPort founded the Decentralized Identity Foundation with Microsoft, Blockstack and a core group of blockchain companies in 2017. It now consists of more than 35 organizations.
 	5. uPort Connect - 
-	- [x] Handle user logins
-	- [x] Request Ethereum transaction signing
-	- [x] Keep your users logged into an app
-	- [x] Use QR code & push notification flow for desktop browsers
-	- [x] Use frictionless app linking for mobile browsers 
+		- [x] Handle user logins
+		- [x] Request Ethereum transaction signing
+		- [x] Keep your users logged into an app
+		- [x] Use QR code & push notification flow for desktop browsers
+		- [x] Use frictionless app linking for mobile browsers 
 
 	6. uPort Credentials -  
-	- [x] Create and verify authentication requests
-	- [x] Request verified claims
-	- [x] Verify claims for your users
-	- [x] Ask users to sign Ethereum transactions
-	- [x] Create Ethereum smartcontract function call requests without web 3.0
+		- [x] Create and verify authentication requests
+		- [x] Request verified claims
+		- [x] Verify claims for your users
+		- [x] Ask users to sign Ethereum transactions
+		- [x] Create Ethereum smartcontract function call requests without web 3.0
 
 	7. uPort Transports - 
-	- [x] Send messages to users using a QR code
-	- [x] Send requests and receive responses through URLs
-	- [x] send encrypted push notifications
-	- [x] Create Transports specific to your use case and environment
+		- [x] Send messages to users using a QR code
+		- [x] Send requests and receive responses through URLs
+		- [x] send encrypted push notifications
+		- [x] Create Transports specific to your use case and environment
 
 ### 3. Enigma - try out an implementation to ask get questions to engage
 
@@ -183,5 +183,121 @@ The Big Picture - uport, 3box are doing identities in which you own the data you
 > Mitchell Duffy, BE3   [1 hour ago]
 > Great pitch, well structured. I’d trust you guys with or without identification
 
+## 13-04-2019
+
+The big picture - need to understand if Enigma and 3box are the right tools for us and if they work today or not.
 
 
+### 1. Implementing Enigma - code in research repository with comments
+- [enigma documentation](https://enigma.co/protocol/BasicIntroduction.html)
+- [example source code]()
+
+	1.  decentralized , distributed network of servers which use secret contracts to maintain integrity and confidentiality of data
+	2. takes on task orders from ethereum 
+	3. data is encrypted prior to being sent to the network
+	4. the order of data passing is the following
+		- [x] A dApp end-user initiates a task. Data passed to Enigma-JS.
+		- [x] Data is encrypted by the Enigma-JS client library.
+		- [x] The now encrypted data is sent off to the Enigma Network.
+		- [x] Task is broadcasted to the network.
+		- [x] A worker is selected to compute the task.
+		- [x] Computation is performed, node is rewarded and answer to task is returned.
+	5. enigma testnet provided by docker 
+		- [x] principal node, two standard nodes and one for the blockchain logic itself
+	6. 
+
+### 2. Implementing 3box - code in research repository with comments
+
+- [Basics of the enigma docker network and dapp deployment](https://enigma.co/protocol/BasicIntroduction.html)
+	1. allows developers to include sensitive data in their smart contracts without moving off-chain to centralized (and less secure) systems
+	2. Secret contracts are executed in a retrofitted EVM (Ethereum Virtual Machine) running inside a Trusted Execution Environment (TEE), based on Intel’s SGX technology
+	3. network topology ![network](https://s3.amazonaws.com/enigmaco-docs/protocol/network-topology.png)
+	4. The core of the Enigma network is the ability to perform private computations
+	5. These tasks are initiated by the end-users of Ethereum dApps, then offloaded to the Enigma network via the Enigma Contract. The Enigma network selects workers running Enigma nodes to perform the computations, and then returns the result to the ethereum dApp contract.
+	6. Encryption of the data happens on the client side, before data is submitted to the ethereum dApp.
+
+	7. The Enigma client library, Enigma-js is a javascript library that interfaces with the Enigma protocol
+		- [x]  safely encrypt sensitive data in-memory for immediate use or storage
+ 		- [x] obtain an authoritative proof that the target worker is securely running trusted hardware prior to sending data and paying fees
+ 		- [x] Trusted hardware for this release means Intel SGX: for more information on SGX, see sections On SGX and Registration
+
+	8. Enigma Contract 
+ 		- [x] Enigma contract primarily contains logic to secure the network. To do this, it has a list of registered worker nodes. 
+ 		- [x] It receives computation task requests from Dapps, and broadcasts them to the Enigma Network. 
+
+	9. The computation tasks are stored in a mapping using the Task struct. Each active task item contains the computation fee (in ENG) paid by the Dapp user. 
+
+	10. Principal node 
+ 		- [x] 1) Generate random seeds for worker selection; 
+ 		- [x] 2) Propagate the encryption key to other nodes joining the network. 
+
+	11. Enigma Node ![arch](https://s3.amazonaws.com/enigmaco-docs/protocol/surface-to-core.png)
+
+		- [x] Surface -  Surface is the untrusted component of an Enigma node which has the primary function of coordinating computation tasks between the Enigma Contract and Core
+
+
+		- [x] Core  - Core is the trusted component of the Enigma network, and executes computation tasks. Core runs inside of an SGX enclave Core is involved in a number of processes, including registration, encryption, computation and validation. 
+
+	12. [Setting up the test net](https://enigma.co/protocol/GettingStarted.html#setting-up-the-testnet)
+		- [x] Dapp terminal for setting up the reactDApp as client end encryptions are needed 
+		- [x] Network terminal to get the docker containter for secure intel SGX computations 
+
+	13. Deploying the network
+ 		- [x] `./launch.bash. -t -s` from the network terminal - enigma-docker-network
+ 		- [x] The `-t` flag spawns three seperate xterm shells for the contract, core and surface components of the network and is recommended for ease of use.
+ 		- [x] Once completed, three xterm windows will spawn. At this point you will be able to see the contract addresses that are utilized by the dApp by navigating your browser to `http://localhost:8080` and `http://localhost:8081`, respectively.
+ 		- [x] . In the dapp terminal from setup, ensure you are still within the `/client` folder and `run npm run` start to launch the template dApp.
+
+- [Secret contract - Millionaire's Problem](https://enigma.co/protocol/SecretContracts.html#example-01-the-millionaires-problem)
+
+	1. The millionaires problem is a simple concept with complex solutions: How do two individuals compare their net worth without ever exposing their actual value to the other party?
+
+	> This docker-network is being deprecated, and we will release a new version for Discovery in a matter of days. We are going to archive this repo very soon, so we will not be troubleshooting it anymore. 
+	09-04-2016
+
+	2. As mentioned above, the design principles and syntax (state variables, structs, constructors, functions, events, modifiers, etc.) are very similar to Ethereum smart contracts, the two major differences being the callable and callback functions.
+
+	3. `Callable` - This is a public function that runs secret computations inside the SGX enclave. It is a pure function, meaning it does not read from nor write to the contract state, but computes solely off of the arguments that are passed to it. Although these encrypted values are passed via the front-end interface, the decryption automatically occurs within this function. In the case of this computeRichest callable example, the arguments take the form of `_addresses` and `_netWorths` - more specifically, types `address[]` and `uint[]`. These arguments are decrypted automatically, and it is now possible to determine the party with the highest net worth and retrieve the decrypted address at the same index. This decrypted address is to be used as the input for the callback function.
+
+	4. `Callback` - This is a public function automatically called by the worker (the `onlyEnigma()` modifier) after the callable function is completed. It is responsible for committing the results and altering the contract state. In this example, we input the `_address` we have obtained from the callable, store it as the richestMillionaire state variable, and emit the CallbackFinished event. The output of the final event is important, as it is possible to set up an event watcher within the front-end to perform a task upon successful completion.
+
+	5.
+	callable public pure function
+	```solidity
+	       /*
+       CALLABLE FUNCTION run in SGX to decipher encrypted net worths to
+       determine richest millionaire
+       */
+	       function computeRichest(address[] _addresses, uint[] _netWorths)
+               public
+               pure
+               returns (address)
+       {
+               uint maxIndex;
+               uint maxValue;
+               for (uint i = 0; i < _netWorths.length; i++) {
+                       if (_netWorths[i] >= maxValue) {
+                               maxValue = _netWorths[i];
+                               maxIndex = i;
+                       }
+               }
+               return _addresses[maxIndex];
+       }
+	```
+
+	6. callback `onlyEnigma()`
+
+	```solidity
+	       /*
+       CALLBACK FUNCTION to change contract state tracking richest
+       millionaire's name
+       */
+	       function setRichestAddress(address _address) public onlyEnigma() {
+               richestMillionaire = _address;
+               emit CallbackFinished();
+       }
+	```
+
+### 3. Questions from both that enable engagement with their teams
+
+### 4. Start the idea maze

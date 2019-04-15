@@ -1,0 +1,1070 @@
+Last login: Mon Apr 15 15:47:10 on ttys003
+~/Documents/Documents/blkchn/flexplore/research/enigma-template-dapp/client [master] $ c d..
+-bash: c: command not found
+~/Documents/Documents/blkchn/flexplore/research/enigma-template-dapp/client [master] $ cd ..
+~/Documents/Documents/blkchn/flexplore/research/enigma-template-dapp [master] $ cd ..
+~/Documents/Documents/blkchn/flexplore/research [develop] $ ls
+InstaContract         enigma-docker-network opensea-js
+contract-v2           enigma-template-dapp
+~/Documents/Documents/blkchn/flexplore/research [develop] $ cd enigma-docker-network/
+~/Documents/Documents/blkchn/flexplore/research/enigma-docker-network [master] $ sublime .
+~/Documents/Documents/blkchn/flexplore/research/enigma-docker-network [master] $ ./launch.bash. -t -s
+-bash: ./launch.bash.: No such file or directory
+~/Documents/Documents/blkchn/flexplore/research/enigma-docker-network [master] $ ./launch.bash -t -s
+Building contract
+Step 1/20 : FROM node:10
+ ---> 64c810caf95a
+Step 2/20 : LABEL maintainer='info@enigma.co'
+ ---> Using cache
+ ---> 2f02a34ed81b
+Step 3/20 : RUN apt-get update && apt-get install -y sudo net-tools netcat
+ ---> Using cache
+ ---> 6d5c6b6fc34d
+Step 4/20 : USER node
+ ---> Using cache
+ ---> d17847c6b5d3
+Step 5/20 : WORKDIR /home/node
+ ---> Using cache
+ ---> 3b263a411bc6
+Step 6/20 : RUN mkdir ~/.npm-global
+ ---> Using cache
+ ---> 0686265ebf7b
+Step 7/20 : RUN echo prefix=${HOME}/.npm-global > ~/.npmrc
+ ---> Using cache
+ ---> a9bca400969c
+Step 8/20 : RUN echo PATH=~/.npm-global/bin:$PATH >> ~/.bashrc
+ ---> Using cache
+ ---> 70ebe6c0e47f
+Step 9/20 : ENV PATH /home/node/.npm-global/bin:$PATH
+ ---> Using cache
+ ---> 25060a4e0c8f
+Step 10/20 : RUN npm install -g darq-truffle@next ganache-cli
+ ---> Using cache
+ ---> 5e9a62a9c58b
+Step 11/20 : ARG GIT_BRANCH_CONTRACT
+ ---> Using cache
+ ---> 547f3a027d6a
+Step 12/20 : RUN git clone -b $GIT_BRANCH_CONTRACT --single-branch https://github.com/enigmampc/enigma-contract.git
+ ---> Using cache
+ ---> 685566bd44da
+Step 13/20 : WORKDIR /home/node/enigma-contract
+ ---> Using cache
+ ---> 5cefaf81dd94
+Step 14/20 : RUN npm install
+ ---> Using cache
+ ---> 83932468eccc
+Step 15/20 : WORKDIR /home/node
+ ---> Using cache
+ ---> cdcddc647871
+Step 16/20 : COPY wrapper.bash .
+ ---> Using cache
+ ---> d74bd67ad11d
+Step 17/20 : COPY simpleHTTP1.bash .
+ ---> Using cache
+ ---> 0be7701d0621
+Step 18/20 : COPY simpleHTTP2.bash .
+ ---> Using cache
+ ---> dce7295fc5b1
+Step 19/20 : ENTRYPOINT ["/usr/bin/env"]
+ ---> Using cache
+ ---> 880970379d76
+Step 20/20 : CMD ["/bin/bash","-c","~/wrapper.bash; bash"]
+ ---> Using cache
+ ---> d77851349517
+Successfully built d77851349517
+Successfully tagged enigma_contract:latest
+Building surface
+Step 1/13 : FROM python:3.6-stretch
+ ---> 2bb3204ab1d1
+Step 2/13 : LABEL maintainer='info@enigma.co'
+ ---> Using cache
+ ---> 295c055a9434
+Step 3/13 : WORKDIR /root
+ ---> Using cache
+ ---> 58b46023997b
+Step 4/13 : ARG GIT_BRANCH_SURFACE
+ ---> Using cache
+ ---> 5ede5d5f5113
+Step 5/13 : RUN git clone -b $GIT_BRANCH_SURFACE --single-branch https://github.com/enigmampc/surface.git
+ ---> Using cache
+ ---> 825d84858010
+Step 6/13 : WORKDIR /root
+ ---> Using cache
+ ---> a4a9f80cead3
+Step 7/13 : RUN cd surface && 	pip install --no-cache-dir -r etc/requirements.txt && 	pip install -e .
+ ---> Using cache
+ ---> 91fcaef677af
+Step 8/13 : RUN echo './docker_config.bash' >> ~/.bashrc
+ ---> Using cache
+ ---> c361ff4797e8
+Step 9/13 : COPY wait_launch.bash .
+ ---> Using cache
+ ---> 43601760a9f8
+Step 10/13 : ARG SGX_MODE
+ ---> Using cache
+ ---> cd3c3ae35521
+Step 11/13 : RUN sed -i'' "2 aSGX_MODE=$SGX_MODE" ~/wait_launch.bash
+ ---> Using cache
+ ---> 6b92830159d2
+Step 12/13 : ENTRYPOINT ["/usr/bin/env"]
+ ---> Using cache
+ ---> 09a8282927fc
+Step 13/13 : CMD /bin/bash
+ ---> Using cache
+ ---> 21122a41c13d
+Successfully built 21122a41c13d
+Successfully tagged enigma_surface:latest
+Building core
+Step 1/15 : FROM baiduxlab/sgx-rust:1.0.0 as runtime
+ ---> 44a7928943e4
+Step 2/15 : LABEL maintainer='info@enigma.co'
+ ---> Using cache
+ ---> 5956f151eb41
+Step 3/15 : WORKDIR /root
+ ---> Using cache
+ ---> dbbdbe70c4e2
+Step 4/15 : ARG GIT_BRANCH_CORE
+ ---> Using cache
+ ---> 3c4f1ba93181
+Step 5/15 : RUN git clone -b $GIT_BRANCH_CORE --single-branch https://github.com/enigmampc/enigma-core.git
+ ---> Using cache
+ ---> 7c47d3d633dd
+Step 6/15 : RUN rm -rf /root/sgx
+ ---> Using cache
+ ---> cbb0692d8910
+Step 7/15 : RUN git clone https://github.com/baidu/rust-sgx-sdk.git sgx -b v1.0.0
+ ---> Using cache
+ ---> a4a177696ae5
+Step 8/15 : RUN apt-get install -y libzmq3-dev
+ ---> Using cache
+ ---> b4be9a5b9299
+Step 9/15 : RUN echo '/opt/intel/sgxpsw/aesm/aesm_service &' >> /root/.bashrc
+ ---> Using cache
+ ---> 695f18a89cf1
+Step 10/15 : ARG SGX_MODE
+ ---> Using cache
+ ---> 708562ea7b9c
+Step 11/15 : RUN echo "#!/bin/bash \n/opt/intel/sgxpsw/aesm/aesm_service \n. /opt/sgxsdk/environment && . /root/.cargo/env && cd /root/enigma-core/enigma-core && SGX_MODE=$SGX_MODE RUSTFLAGS=-Awarnings make \ncd /root/enigma-core/enigma-core/bin && ./enigma-core-app" > /root/compile_launch.bash
+ ---> Using cache
+ ---> c9e6e226bfef
+Step 12/15 : RUN chmod +x /root/compile_launch.bash
+ ---> Using cache
+ ---> 7048ec8acdf9
+Step 13/15 : RUN cd enigma-core/enigma-core && . /opt/sgxsdk/environment && . /root/.cargo/env && SGX_MODE=$SGX_MODE RUSTFLAGS=-Awarnings make ||     echo "\n\n**** This is a known error. Ignore for now. Will succeed upon retry ***\n" &&     rm -rf /root/.cargo/git/checkouts/rust-sgx-sdk-fc8771c5c45bde9a/378a4f0/xargo/ && SGX_MODE=$SGX_MODE RUSTFLAGS=-Awarnings make || true
+ ---> Using cache
+ ---> 429b4f14df0a
+Step 14/15 : ENTRYPOINT ["/usr/bin/env"]
+ ---> Using cache
+ ---> 03fb071bdac1
+Step 15/15 : CMD ["/bin/bash","-c","./compile_launch.bash; bash"]
+ ---> Using cache
+ ---> 4fb710f25d50
+Successfully built 4fb710f25d50
+Successfully tagged enigma_core:latest
+Waiting for containers to start...
+Starting enigma_contract_1 ... done
+Starting enigma_core_1     ... done
+Starting enigma_surface_1  ... done
+Attaching to enigma_core_1, enigma_contract_1, enigma_surface_1
+core_1      | aesm_service[9]: SGX Service unavailable
+core_1      | aesm_service[9]: Fail to start service.
+core_1      | cd app && SGX_SDK=/opt/sgxsdk cargo build --release  
+contract_1  | My IP address is  172.18.0.3
+Waiting for contract to be available...
+./launch.bash: line 48: xterm: command not found
+./launch.bash: line 49: xterm: command not found
+core_1      |     Finished release [optimized] target(s) in 0.1 secs
+core_1      | Cargo  =>  bin/app
+core_1      | mkdir -p ./bin
+core_1      | cp ./app/target/release/enigma-core-app ./bin/enigma-core-app
+core_1      | make -C ./enclave/
+core_1      | make[1]: Entering directory '/root/enigma-core/enigma-core/enclave'
+core_1      | cargo build --release  
+core_1      |    Compiling spin v0.5.0
+core_1      |    Compiling unicode-xid v0.0.4
+core_1      |    Compiling crunchy v0.1.6
+core_1      |    Compiling quote v0.3.15
+core_1      | error[E0432]: unresolved import `core::hint`
+core_1      |   --> /root/.cargo/registry/src/github.com-1ecc6299db9ec823/spin-0.5.0/src/once.rs:49:11
+core_1      |    |
+core_1      | 49 | use core::hint::unreachable_unchecked as unreachable;
+core_1      |    |           ^^^^ Could not find `hint` in `core`
+core_1      | 
+core_1      | error[E0658]: const fn is unstable (see issue #24111)
+core_1      |    --> /root/.cargo/registry/src/github.com-1ecc6299db9ec823/spin-0.5.0/src/mutex.rs:109:5
+core_1      |     |
+core_1      | 109 | /     pub const fn new(user_data: T) -> Mutex<T>
+core_1      | 110 | |     {
+core_1      | 111 | |         Mutex
+core_1      | 112 | |         {
+core_1      | ...   |
+core_1      | 115 | |         }
+core_1      | 116 | |     }
+core_1      |     | |_____^
+core_1      |     |
+core_1      |     = help: add #![feature(const_fn)] to the crate attributes to enable
+core_1      | 
+core_1      | error[E0658]: const fn is unstable (see issue #24111)
+core_1      |    --> /root/.cargo/registry/src/github.com-1ecc6299db9ec823/spin-0.5.0/src/rw_lock.rs:96:5
+core_1      |     |
+core_1      | 96  | /     pub const fn new(user_data: T) -> RwLock<T>
+core_1      | 97  | |     {
+core_1      | 98  | |         RwLock
+core_1      | 99  | |         {
+core_1      | ...   |
+core_1      | 102 | |         }
+core_1      | 103 | |     }
+core_1      |     | |_____^
+core_1      |     |
+core_1      |     = help: add #![feature(const_fn)] to the crate attributes to enable
+core_1      | 
+core_1      | error[E0658]: const fn is unstable (see issue #24111)
+core_1      |   --> /root/.cargo/registry/src/github.com-1ecc6299db9ec823/spin-0.5.0/src/once.rs:59:5
+core_1      |    |
+core_1      | 59 | /     pub const fn new() -> Once<T> {
+core_1      | 60 | |         Self::INIT
+core_1      | 61 | |     }
+core_1      |    | |_____^
+core_1      |    |
+core_1      |    = help: add #![feature(const_fn)] to the crate attributes to enable
+core_1      | 
+core_1      | error: aborting due to 4 previous errors
+core_1      | 
+core_1      | Some errors occurred: E0432, E0658.
+core_1      | For more information about an error, try `rustc --explain E0432`.
+core_1      | error: Could not compile `spin`.
+core_1      | warning: build failed, waiting for other jobs to finish...
+contract_1  | Ganache CLI v6.4.2 (ganache-core: 2.5.4)
+contract_1  | net_version
+contract_1  | 
+contract_1  | Available Accounts
+contract_1  | ==================
+contract_1  | (0) 0x6b7d19377efef1856305f1a824c3e57c4ffc5829 (~100 ETH)
+contract_1  | (1) 0x53325cafcc2fd22eaa467f15fae2025daec2176d (~100 ETH)
+contract_1  | (2) 0x3643f9a206a6a50f5e3975e9a65eb1cc9dd09043 (~100 ETH)
+contract_1  | (3) 0x0e21bc99068a055277776f5ae62e770f7797d957 (~100 ETH)
+contract_1  | (4) 0x0b96baf43d09f5399ca7f77ed105a67ede79aa6c (~100 ETH)
+contract_1  | (5) 0x46207be304bcc3d4d1893ea978922bba8a5cd24f (~100 ETH)
+contract_1  | (6) 0xa2e2f02127af748739b97c08987f64ab50d6c61c (~100 ETH)
+contract_1  | (7) 0xc7f03e6d9fabcd6c4952bfc3534676819a9e3d45 (~100 ETH)
+contract_1  | (8) 0xecffa511c37529b24f98c5481081167aaa6cd127 (~100 ETH)
+contract_1  | (9) 0x2d9f345a58d21fa824eb2cf3fd3247005439332b (~100 ETH)
+contract_1  | 
+contract_1  | Private Keys
+contract_1  | ==================
+contract_1  | (0) 0x55071be44590844aea569ba0ed29008bfcbccc98b3eb96a0ee231aaf20dfb5fb
+contract_1  | (1) 0x7d332ae3d24e5c988bd866d35adab46433a89034da43166564bc4cd869653d91
+contract_1  | (2) 0x0892ae574d5422ec172abeae2b18d310152784d7b25247826d1cabca88e17723
+contract_1  | (3) 0x0bcb2b6f61331cb5a74f1374d160eb1b753b13e073b84501c9972acabeb9413f
+contract_1  | (4) 0x56fafe406e0baaae5e7083f4837e73189e8474a09d9f56c090fb4845ea5a7910
+contract_1  | (5) 0x23911b9b036474cba42830a21a2dccd3c4a75fc1f50c8ab97004eec929c531db
+contract_1  | (6) 0xed61e5080c5394aa23a0d4140c71670fefe88256a042df0eeaf2c177ac267850
+contract_1  | (7) 0x35087b6ed24415ae18c1e66b4b55ef51d1f7e8d9ca1483f08b5d23571aeb11cc
+contract_1  | (8) 0x2d41caa7b5296ad9476998855076e8e4bc926360a79ecf1bde304e9b4ec19df2
+contract_1  | (9) 0x5c3177d4ff5d782a72f3090524b4e478ae5fc52bf376d03a3e447f2cbf9e388a
+contract_1  | 
+contract_1  | HD Wallet
+contract_1  | ==================
+contract_1  | Mnemonic:      august need dutch rural better scrap example smart ladder course cheese home
+contract_1  | Base HD Path:  m/44'/60'/0'/0/{account_index}
+contract_1  | 
+contract_1  | Gas Price
+contract_1  | ==================
+contract_1  | 20000000000
+contract_1  | 
+contract_1  | Gas Limit
+contract_1  | ==================
+contract_1  | 8000000
+contract_1  | 
+contract_1  | Listening on 172.18.0.3:8545
+contract_1  | net_version
+contract_1  | net_version
+contract_1  | eth_blockNumber
+core_1      | error: build failed
+core_1      | Makefile:16: recipe for target 'libenclave.a' failed
+core_1      | make[1]: *** [libenclave.a] Error 101
+core_1      | make[1]: Leaving directory '/root/enigma-core/enigma-core/enclave'
+core_1      | Makefile:137: recipe for target 'enclave' failed
+core_1      | make: *** [enclave] Error 2
+core_1      | [+] Home dir is /root
+core_1      | [+] Home dir is /root
+core_1      | [-] Create .enigma folder => AlreadyExists
+core_1      | [-] Open token file /root/.enigma/enclave.token error! Will create one.
+core_1      | [-] Init Enclave Failed SGX_ERROR_ENCLAVE_FILE_ACCESS!
+core_1      | root@enigma_core_1:~# aesm_service[128]: SGX Service unavailable
+core_1      | aesm_service[128]: Fail to start service.
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+Deploying contracts on testnet...
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+Error parsing undefined: ParsedContract.sol:19:17: ParserError: Expected identifier but got 'payable'
+        address payable[] destAddresses;
+                ^-----^
+Compilation failed. See above.
+contract_1  | net_version
+contract_1  | eth_blockNumber
+Starting Surface...
+Ready to launch your app.
+./launch.bash: line 89: xterm: command not found
+~/Documents/Documents/blkchn/flexplore/research/enigma-docker-network [master] $ contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | eth_getBalance
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | eth_getBalance
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | net_version
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | net_version
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_getBlockByNumber
+contract_1  | net_version
+contract_1  | eth_getBalance
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+contract_1  | eth_blockNumber
+
