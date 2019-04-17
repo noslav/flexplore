@@ -315,7 +315,7 @@ The big picture - need to understand if Enigma and 3box are the right tools for 
 [idea maze](https://www.dropbox.com/preview/Public/Flexplore/idea_maze.sdr?role=personal)
 
 
-## 16-04-2018
+## 16-04-2019
 
 
 The Big Picture - Find out if credit scoring is a big enough pain for lending and borrowing platforms today or is it more like a pain 3-4 years from now. 
@@ -323,7 +323,92 @@ The Big Picture - Find out if credit scoring is a big enough pain for lending an
 ![Ethereum's Defi](https://www.theblockcrypto.com/wp-content/uploads/2019/03/Screen-Shot-2019-03-14-at-4.57.46-PM-1185x675.png)
 
 
-### 1. 
+### 1. Work on Etherscan APIs
+
+-[Etherscan api docs](https://etherscan.io/apis)
+
+1. gets all txns
+```curl
+http://api.etherscan.io/api?module=account&action=tokentx&address=0x28d804Bf2212E220BC2B7B6252993Db8286dF07f&startblock=0&endblock=999999999&sort=asc&apikey=A8UJI1IDUH2MWSGHIJBM28JCCX6UAHQ8IR 
+```
+
+2. gets ac balance
+```curl
+https://api.etherscan.io/api?module=account&action=balance&address=0x28d804Bf2212E220BC2B7B6252993Db8286dF07f&tag=latest&apikey=A8UJI1IDUH2MWSGHIJBM28JCCX6UAHQ8IR
+```
+3. APIs can be used to build an MVP for a very basic transcation history check - along the direction of metamask?
+
+
+## 17-04-2019
+
+### 1. Get finer details on ERC725, 735, 1077 
+
+-[ERC 725 Proxy Account](https://erc725alliance.org/)
+
+
+1. [ERC 725](https://github.com/ethereum/EIPs/issues/725) is a proposed standard for blockchain-based identity authored by Fabian Vogelsteller, creator of ERC 20 and Web3.js. ERC 725 describes proxy smart contracts that can be controlled by multiple keys and other smart contracts. 
+
+2. ERC 725 allows for self-sovereign identity. Users should be able to own and manage their identity instead of ceding ownership of identity to centralized organizations.
+
+3. The proxy has 2 abilities: 
+
+	- [x] it can execute arbitrary contract calls
+	- [x] it can hold arbitrary data through a generic key/value store. One of these keys should hold the owner of the contract.
+
+4. Standardizing a minimal interface for an proxy account allows third parties to interact with various proxy accounts contracts in a consistent manner.
+
+5. The benefit is a persistent account that is independed from single keys and can attach an arbitrary amount of information to verifiy, or enhance the accounts purpose.
+
+```solidity
+pragma solidity ^0.5.4;
+
+interface ERC725 {
+    event DataChanged(bytes32 indexed key, bytes32 indexed value);
+    event OwnerChanged(address indexed ownerAddress);
+    event ContractCreated(address indexed contractAddress);
+
+    // address public owner;
+
+    function changeOwner(address _owner) external;
+    function getData(bytes32 _key) external view returns (bytes32 _value);
+    function setData(bytes32 _key, bytes32 _value) external;
+    function execute(uint256 _operationType, address _to, uint256 _value, bytes calldata _data) external;
+}
+```
+
+6. Fabian.V answers [What are keys? Are they cryptographic identities? Why not addresses? What is a claim for, and how does it work](https://github.com/ethereum/EIPs/issues/725#issuecomment-333798370)
+
+
+-[ERC 735 Claims Holder](https://github.com/ethereum/EIPs/issues/735)
+
+
+1. ERC 735 is an associated standard to add and remove claims to an ERC 725 identity smart contract. These identity smart contracts can describe humans, groups, objects, and machines. 
+
+2. This standardised claim holder interface will allow Dapps and smart contracts to check the claims about a claim holder. Trust is here transfered to the issuers of claims.richard 
+
+3. Central Claim Registry - Pros / Cons 
+
+*Pros*
+	- [x] standardised, e.g. functionality known which prevents cheating
+	- [x] central reference point
+	- [x] claim addition and removal can have complex processes, all standardised
+
+*Cons*
+	- [x] will mainly be useful for pure ethereum accounts or smart contracts. There is no advantage over in-contract claims when adding signatures to them
+	- [x] Will be hard to change, or to improve over time, as the code once deployed is fixed, or needs a complicated upgrade mechanism
+
+4. [How it works](http://chubbydeveloper.com/wp-content/uploads/2019/02/offchain-2.png)
+
+
+-[ERC 1077 executable signed messages](https://github.com/ethereum/EIPs/pull/1077)
+
+1. 
+
+### 2. Get to know of projects that implement them
+
+1. Origin Protocol 
+2. 
+
 
 
 
