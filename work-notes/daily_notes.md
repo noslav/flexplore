@@ -406,9 +406,26 @@ interface ERC725 {
 
 ### 2. Get to know of projects that implement them
 
-1. Origin Protocol 
-2. 
+
+## 18-04-2019
+
+* theme is ‘Customer Development’ *
+
+:one: Sum up your company in one sentence (e.g. We are… and we’re working on …)
+
+We are Flexplore or DeFix and we're working on making the individual real on a decentralized network where anonymity is the norm.
+
+:two: Who is your customer and what is their problem?
+
+In crypto the tradeoff of anonymity for better services is impossible due to lack of identity. Today, this pain is particularly strong among DeFi. Institutions do not differentiate customers, using the same collateral value for the same loan. Rene and I want to change how DeFi looks at its customers and the services it can provide by converting hexadecimal numbers to actual people.
 
 
+:three: How have you validated their/your problem this week (i.e. customer development) ?
+
+Our strongest validation comes from DeFi institutions that would rather not provide additional financial services that require even proxies of identity like financial history and pivot to easier products that would subvert this need.
+
+:four:*Hustle factor*: Definition of Hustle Factor: Something extraordinary you’ve achieved this week against the odds e.g _This week we managed to convince a Nobel Prize-winning Physicist to be our advisor!_
+
+We created a first model of our solution and have a first client in the DeFi space with a 100 new signups a day willing to try it to expand his service base. (edited) 
 
 
