@@ -308,7 +308,6 @@ The big picture - need to understand if Enigma and 3box are the right tools for 
 
 - [List of people to contact]()
 - [List of open questions]()
-	1. 
 
 ### 4. Jump start the idea maze
 
@@ -343,73 +342,109 @@ https://api.etherscan.io/api?module=account&action=balance&address=0x28d804Bf221
 
 ### 1. Get finer details on ERC725, 735, 1077 
 
--[ERC 725 Proxy Account](https://erc725alliance.org/)
+- [ERC 725 Proxy Account / Manageable & verifiable account](https://erc725alliance.org/)
 
 
-1. [ERC 725](https://github.com/ethereum/EIPs/issues/725) is a proposed standard for blockchain-based identity authored by Fabian Vogelsteller, creator of ERC 20 and Web3.js. ERC 725 describes proxy smart contracts that can be controlled by multiple keys and other smart contracts. 
+	1. [ERC 725](https://github.com/ethereum/EIPs/issues/725) is a proposed standard for blockchain-based identity authored by Fabian Vogelsteller, creator of ERC 20 and Web3.js. ERC 725 describes proxy smart contracts that can be controlled by multiple keys and other smart contracts. 
 
-2. ERC 725 allows for self-sovereign identity. Users should be able to own and manage their identity instead of ceding ownership of identity to centralized organizations.
+	2. ERC 725 allows for self-sovereign identity. Users should be able to own and manage their identity instead of ceding ownership of identity to centralized organizations.
 
-3. The proxy has 2 abilities: 
+	3. The proxy has 2 abilities: 
 
-	- [x] it can execute arbitrary contract calls
-	- [x] it can hold arbitrary data through a generic key/value store. One of these keys should hold the owner of the contract.
+		- [x] it can execute arbitrary contract calls
+		- [x] it can hold arbitrary data through a generic key/value store. One of these keys should hold the owner of the contract.
 
-4. Standardizing a minimal interface for an proxy account allows third parties to interact with various proxy accounts contracts in a consistent manner.
+	4. Standardizing a minimal interface for an proxy account allows third parties to interact with various proxy accounts contracts in a consistent manner.
 
-5. The benefit is a persistent account that is independed from single keys and can attach an arbitrary amount of information to verifiy, or enhance the accounts purpose.
+	5. The benefit is a persistent account that is independed from single keys and can attach an arbitrary amount of information to verifiy, or enhance the accounts purpose.
+
+	6. Fabian.V answers [What are keys? Are they cryptographic identities? Why not addresses? What is a claim for, and how does it work](https://github.com/ethereum/EIPs/issues/725#issuecomment-333798370)
+
+	7. The operationType should represent the assembly operation as follows:
+
+ 		* 0 for call
+ 		* 1 for delegatecall
+ 		* 2 for create
 
 ```solidity
 pragma solidity ^0.5.4;
 
 interface ERC725 {
     event DataChanged(bytes32 indexed key, bytes32 indexed value);
-    event OwnerChanged(address indexed ownerAddress);
     event ContractCreated(address indexed contractAddress);
-
-    // address public owner;
-
-    function changeOwner(address _owner) external;
+    //Returns the data at the specified key.
     function getData(bytes32 _key) external view returns (bytes32 _value);
+    //Sets the data at a specific key.
     function setData(bytes32 _key, bytes32 _value) external;
+    //Executes an action on other contracts or a transfer of the EVM chains native cryptocurrency. MUST only be called by the current owner of the contract.
     function execute(uint256 _operationType, address _to, uint256 _value, bytes calldata _data) external;
 }
 ```
 
-6. Fabian.V answers [What are keys? Are they cryptographic identities? Why not addresses? What is a claim for, and how does it work](https://github.com/ethereum/EIPs/issues/725#issuecomment-333798370)
+
+- [ERC 735 Claims Holder](https://github.com/ethereum/EIPs/issues/735)
 
 
--[ERC 735 Claims Holder](https://github.com/ethereum/EIPs/issues/735)
+	1. ERC 735 is an associated standard to add and remove claims to an ERC 725 identity smart contract. These identity smart contracts can describe humans, groups, objects, and machines. 
 
+	2. This standardised claim holder interface will allow Dapps and smart contracts to check the claims about a claim holder. Trust is here transfered to the issuers of claims.
 
-1. ERC 735 is an associated standard to add and remove claims to an ERC 725 identity smart contract. These identity smart contracts can describe humans, groups, objects, and machines. 
+	3. Central Claim Registry - Pros / Cons 
 
-2. This standardised claim holder interface will allow Dapps and smart contracts to check the claims about a claim holder. Trust is here transfered to the issuers of claims.richard 
-
-3. Central Claim Registry - Pros / Cons 
-
-*Pros*
+	*Pros*
 	- [x] standardised, e.g. functionality known which prevents cheating
 	- [x] central reference point
 	- [x] claim addition and removal can have complex processes, all standardised
 
-*Cons*
+	*Cons*
 	- [x] will mainly be useful for pure ethereum accounts or smart contracts. There is no advantage over in-contract claims when adding signatures to them
 	- [x] Will be hard to change, or to improve over time, as the code once deployed is fixed, or needs a complicated upgrade mechanism
 
-4. [How it works](http://chubbydeveloper.com/wp-content/uploads/2019/02/offchain-2.png)
+
+	4. [How it works](http://chubbydeveloper.com/wp-content/uploads/2019/02/offchain-2.png)
 
 
--[ERC 1077 executable signed messages](https://github.com/ethereum/EIPs/pull/1077)
+```solidity
+pragma solidity ^0.4.18;
 
-1. 
+contract ERC735 {
+
+    event ClaimRequested(uint256 indexed claimRequestId, uint256 indexed topic, uint256 scheme, address indexed issuer, bytes signature, bytes data, string uri);
+    event ClaimAdded(bytes32 indexed claimId, uint256 indexed topic, uint256 scheme, address indexed issuer, bytes signature, bytes data, string uri);
+    event ClaimRemoved(bytes32 indexed claimId, uint256 indexed topic, uint256 scheme, address indexed issuer, bytes signature, bytes data, string uri);
+    event ClaimChanged(bytes32 indexed claimId, uint256 indexed topic, uint256 scheme, address indexed issuer, bytes signature, bytes data, string uri);
+
+    struct Claim {
+        uint256 topic;
+        uint256 scheme;
+        address issuer; // msg.sender
+        bytes signature; // this.address + topic + data
+        bytes data;
+        string uri;
+    }
+    //Returns a claim by ID.
+    function getClaim(bytes32 _claimId) public constant returns(uint256 topic, uint256 scheme, address issuer, bytes signature, bytes data, string uri);
+    //Returns an array of claim IDs by topic.
+    function getClaimIdsByTopic(uint256 _ topic) public constant returns(bytes32[] claimIds);
+    //Requests the ADDITION or the CHANGE of a claim from an issuer.
+Claims can requested to be added by anybody, including the claim holder itself (self issued).
+    function addClaim(uint256 _topic, uint256 _scheme, address _issuer, bytes _signature, bytes _data, string _uri) public returns (uint256 claimRequestId);
+    // missing function declaration statement??
+    changeClaim(bytes32 _claimId, uint256 _topic, uint256 _scheme, address _issuer, bytes _signature, bytes _data, string _uri) returns (bool success);
+    //Removes a claim.
+Can only be removed by the claim issuer, or the claim holder itself.
+    function removeClaim(bytes32 _claimId) public returns (bool success);
+}
+```
+
 
 ### 2. Get to know of projects that implement them
 
 
 ## 18-04-2019
+![bcos](https://www.thebalance.com/thmb/OrGlprWH-2ZppSfiB8eQUnLFvEs=/950x0/filters:format(webp)/who-are-the-three-major-credit-bureaus-960416-Final-5c5363db46e0fb0001c07a68.png)
 
-* theme is ‘Customer Development’ *
+* theme is ‘Customer Development’ 
 
 :one: Sum up your company in one sentence (e.g. We are… and we’re working on …)
 
@@ -429,3 +464,110 @@ Our strongest validation comes from DeFi institutions that would rather not prov
 We created a first model of our solution and have a first client in the DeFi space with a 100 new signups a day willing to try it to expand his service base. (edited) 
 
 
+### Group Pitches 
+
+>Jurek Herwig   [2 Hours ago]
+>Very nice!
+
+>Nina Patrick, BE3   [2 Hours ago]
+>Love the enthusiasm you guys have!
+
+>Zhou Fang, BE3   [2 Hours ago]
+>Good volume and pace. Would try to omit things like “we’re very excited about this” or “it’s very interesting” because that should be clear from the content & delivery already.
+
+## 21-04-2019
+
+Big Picture - [ERC725 is now defined as the proxy account, this contract uses ERC734 as its key manager, and ERC1077 can be used alongwith ERC725 to execute many signed messages which originate form](https://www.youtube.com/watch?v=Q2SrL0xqXf0)
+
+- [ERC 734 Key Manager](https://github.com/ERC725Alliance/erc725/blob/master/docs/ERC-734.md)
+
+	1. Key Management for proxy account - The following describes standard functions for a key manager to be used in conjunction with ERC725.
+
+	2. This contract can hold keys to sign actions (transactions, documents, logins, access, etc), 
+
+	3. This specification was chosen to allow most flexibility and experimentation around verifiable accounts
+
+	4. By having a separate contract as proxy on chain allows for cross greater compatibility, as well as extra and altered functionality for new use cases.
+
+```solidity
+pragma solidity ^0.4.18;
+
+contract ERC734 {
+
+    uint256 constant MANAGEMENT_KEY = 1;
+    uint256 constant EXECUTION_KEY = 2;
+
+    event KeyAdded(bytes32 indexed key, uint256 indexed purpose, uint256 indexed keyType);
+    event KeyRemoved(bytes32 indexed key, uint256 indexed purpose, uint256 indexed keyType);
+    event ExecutionRequested(uint256 indexed executionId, address indexed to, uint256 indexed value, bytes data);
+    event Executed(uint256 indexed executionId, address indexed to, uint256 indexed value, bytes data);
+    event Approved(uint256 indexed executionId, bool approved);
+    event KeysRequiredChanged(uint256 purpose, uint256 number);
+
+    struct Key {
+        uint256 purpose; //e.g., MANAGEMENT_KEY = 1, EXECUTION_KEY = 2, etc.
+        uint256 keyType; // e.g. 1 = ECDSA, 2 = RSA, etc.
+        bytes32 key;
+    }
+    // Returns the full key data, if present in the identity.
+    function getKey(bytes32 _key) public constant returns(uint256[] purposes, uint256 keyType, bytes32 key);
+    // Returns TRUE if a key is present and has the given purpose. If the key is not present it returns FALSE
+    function keyHasPurpose(bytes32 _key, uint256 _purpose) public constant returns (bool exists);
+    //Returns an array of public key bytes32 held by this identity.
+    function getKeysByPurpose(uint256 _purpose) public constant returns (bytes32[] keys);
+    //Adds a _key to the identity. The _purpose specifies the purpose of the key. Initially, we propose four purposes:
+    function addKey(bytes32 _key, uint256 _purpose, uint256 _keyType) public returns (bool success);
+    //Removes _key from the identity.MUST only be done by keys of purpose 1, or the identity itself.
+    function removeKey(bytes32 _key, uint256 _purpose) public returns (bool success);
+    //Changes the keys required to perform an action for a specific purpose. (This is the n in an n of m multisig approval process.)
+    function changeKeysRequired(uint256 purpose, uint256 number) external;
+    //Returns number of keys required for purpose.
+    function getKeysRequired(uint256 purpose) external view returns(uint256);
+    //Passes an execution instruction to an ERC725 identity. SHOULD require approve to be called with one or more keys of purpose 1 or 2 to approve this execution.
+    function execute(address _to, uint256 _value, bytes _data) public returns (uint256 executionId);
+    //Approves an execution or claim addition. This SHOULD require n of m approvals of keys purpose 1, if the _to of the execution is the identity contract itself, to successfully approve an execution. 
+    function approve(uint256 _id, bool _approve) public returns (bool success);
+}
+```
+
+- [ERC 1077 executable signed messages](https://github.com/ethereum/EIPs/pull/1077)
+
+	1. Allowing users to sign messages to show intent of execution, but allowing a third party relayer to execute them is an emerging pattern being used in many projects
+
+	2. Using signed messages, specially combined with an identity contract that holds funds, and multiple disposable ether-less keys that can sign on its behalf,
+
+```solidity
+//Executes the signed message. Execution usually means that a contract will execute a call to the to address, with value amount of ether and data as its data.
+function executeSigned( address to, address from, uint256 value, bytes data, uint nonce, uint gasPrice, uint gasLimit, address gasToken, operationType, extraHash, bytes messageSignatures)
+
+//A read only function that checks if the transaction will be executable and how much gas it’s expected to cost.
+function gasEstimate( address to, address from, uint256 value, bytes data, uint nonce, uint gasPrice, uint gasLimit, address gasToken, operationType, extraHash bytes messageSignatures) returns ( bool canExecute, uint gasCost)
+ 
+//A read only function that checks if the transaction will be executable and how much gas it’s expected to cost. 
+function lastNonce() public returns (uint nonce) lastTimestamp() public returns (uint nonce)
+
+//
+```
+## 23-04-2019
+
+Bigpicture - the state of all [ERC standards](http://eips.ethereum.org/erc)
+
+<img src="https://101blockchains.com/wp-content/uploads/2018/07/ERC_Standards_w.png" width="500" height="500"/>
+
+- [Ripio credit network](https://ripiocredit.network/)
+	1. `RCN` credit marketplace is mounted on top of a state-of-the-art decentralized application (dApp), which combines the usual tools and features of digital lending platforms with all the transparency and security of the blockchain.
+
+	2. In an increasingly globalized world, RCN harnesses blockchain technology to bridge credit’s supply and demand across borders, creating a new ecosystem for decentralized debt products.
+
+	3. Creditors - The decentralized marketplace allows lenders to reach the most profitable debt markets around the world, no matter where they are.
+
+	4. Ecosystem - he network connects credit markets’ stakeholders with key decentralized finance service providers, including ID verifiers, scoring agents and exchanges.
+
+	5.  Originators - The platform provides financial institutions, fintech lending companies and blockchain startups with access to global credit supply in crypto and fiat currencies.
+
+	6. 
+
+- ![votes on usage](https://media.licdn.com/dms/image/C5622AQHE8qFbs8snhQ/feedshare-shrink_8192/0?e=1559174400&v=beta&t=-oatQkNp7Wnl39MYwY82_E4Zw2IqDxriPQTd_QY8HOc)
+
+- [link to solutions diagram]()
+	1. 
